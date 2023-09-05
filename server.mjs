@@ -41,36 +41,30 @@ app.post('/upload', upload.single('file'), async (req, res) => {
 		dateTime: new Date(),
 	};
 
-	res.json(fileInfo);
+	// Save the fileInfo to Firestore
+	try {
+		const docRef = await db.collection('images').add(fileInfo);
+		fileInfo.id = docRef.id; // Update the ID with Firestore's generated ID
+		res.json(fileInfo);
+	} catch (error) {
+		console.error('Error saving to Firestore:', error);
+		res.status(500).send('Internal Server Error');
+	}
 });
 
 // Define a route to list all uploaded files with detailed information
 app.get('/uploads', async (req, res) => {
 	try {
-		// Read the contents of the 'uploads' directory
-		const files = await fs.readdir(path.join(__dirname, 'uploads'));
+		const snapshot = await db.collection('images').get();
 
-		// Create an array of objects containing detailed file information
-		const fileDetails = await Promise.all(
-			files.map(async (filename) => {
-				const filePath = `/uploads/${filename}`;
-				const fileStats = await fs.stat(
-					path.join(__dirname, 'uploads', filename)
-				);
+		const fileDetails = snapshot.docs.map((doc) => ({
+			id: doc.id,
+			...doc.data(),
+		}));
 
-				return {
-					filename,
-					id: fileStats.ctimeMs,
-					url: filePath,
-					dateTime: fileStats.ctime,
-				};
-			})
-		);
-
-		// Send the array of detailed file information as JSON
 		res.json(fileDetails);
 	} catch (err) {
-		console.error('Error reading directory:', err);
+		console.error('Error reading Firestore:', err);
 		res.status(500).send('Internal Server Error');
 	}
 });
