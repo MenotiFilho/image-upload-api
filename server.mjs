@@ -3,11 +3,11 @@ import multer from 'multer';
 import path from 'path';
 import cors from 'cors';
 import { fileURLToPath } from 'url';
-import { db } from './firebase.mjs'; // Update the path as needed
-
+import pkg from './firebase.cjs';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+const { db } = pkg;
 const app = express();
 const port = process.env.PORT || 3001;
 
