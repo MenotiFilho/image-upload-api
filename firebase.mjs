@@ -1,6 +1,6 @@
-const admin = require('firebase-admin');
+import * as admin from 'firebase-admin';
 
-const serviceAccount = require('./etc/secrets/image-api-6ad47-firebase-adminsdk-q470c-4086d8e815.json');
+import serviceAccount from './etc/secrets/image-api-6ad47-firebase-adminsdk-q470c-4086d8e815.json';
 
 admin.initializeApp({
 	credential: admin.credential.cert(serviceAccount),
