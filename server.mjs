@@ -2,8 +2,8 @@ import express from 'express';
 import multer from 'multer';
 import path from 'path';
 import cors from 'cors';
-import fs from 'fs/promises';
 import { fileURLToPath } from 'url';
+import { db } from './firebase.mjs'; // Update the path as needed
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

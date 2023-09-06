@@ -7,3 +7,6 @@ admin.initializeApp({
 });
 
 const db = admin.firestore();
+
+// Export the db variable so that it can be used in other modules
+export { db };
