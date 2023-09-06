@@ -1,9 +1,13 @@
 import * as admin from 'firebase-admin';
+import * as dotenv from 'dotenv';
 
-import serviceAccount from './etc/secrets/image-api-6ad47-firebase-adminsdk-q470c-4086d8e815.json';
+dotenv.config();
+
+// Access environment variables
+const serviceAccountKey = JSON.parse(process.env.FIREBASE_ADMIN_KEY);
 
 admin.initializeApp({
-	credential: admin.credential.cert(serviceAccount),
+	credential: admin.credential.cert(serviceAccountKey),
 });
 
 const db = admin.firestore();
